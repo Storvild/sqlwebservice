@@ -31,12 +31,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'djangocms_admin_style', # djangocms
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # djangocms
+    'django.contrib.sites',
+    'cms',
+    'menus',
+    'treebeard',
+    
 ]
 
 MIDDLEWARE = [
@@ -103,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Moscow/Europe'
 
 USE_I18N = True
 
@@ -118,3 +126,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
+
+LANGUAGES = [
+    ('ru', 'Russian'),
+    ('en', 'English'),
+]
