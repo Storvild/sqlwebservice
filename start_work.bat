@@ -1,0 +1,1 @@
+start e:\virtualenvs\storvild\env36\Scripts\activate.bat 
