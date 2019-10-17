@@ -1,0 +1,126 @@
+http://docs.django-cms.org/en/latest/how_to/install.html
+
+pip install django-cms
+pip install django-filer
+
+django-admin.py startproject djangocms_proj
+python manage.py createsuperuser
+admin/admin
+
+
+В settings.py INSTALLED_APPS добавляем:
+  В начало перед django.contrib.admin добавляем:
+    'djangocms_admin_style'
+  В конец добавляем:    
+    # djangocms
+    'django.contrib.sites',
+    'cms',
+    'menus',
+    'treebeard',
+    'sekizai',
+
+    # djangocms: filer
+    'filer',
+    'easy_thumbnails',
+    'mptt',
+    
+    # djangocms: ckeditor
+    'djangocms_text_ckeditor'
+
+В settings.py MIDDLEWARE добавляем:
+    # djangocms
+    'django.middleware.locale.LocaleMiddleware', 
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
+    'cms.middleware.utils.ApphookReloadMiddleware',
+ 
+ 
+В settings.py TEMPLATES/OPTIONS/context_processors добавляем:
+    # djangocms
+    'cms.context_processors.cms_settings',
+    'sekizai.context_processors.sekizai',
+    'django.template.context_processors.i18n',
+
+
+В settings.py TEMPLATES/DIRS меняем:
+    'DIRS': ['templates'],
+    
+    
+В settings.py добавляем: 
+
+    LANGUAGE_CODE = 'ru' 
+    TIME_ZONE = 'Europe/Moscow'
+    
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+    SITE_ID = 1
+
+    LANGUAGES = [
+        ('ru', 'Russian'),
+        ('en', 'English'),
+    ]
+
+    CMS_TEMPLATES = [
+        ('home.html', 'Home page template'),
+    ]
+
+    THUMBNAIL_HIGH_RESOLUTION = True
+
+    THUMBNAIL_PROCESSORS = (
+        'easy_thumbnails.processors.colorspace',
+        'easy_thumbnails.processors.autocrop',
+        'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+        'easy_thumbnails.processors.filters'
+    )
+
+
+Проверять проект можно двумя командами:
+    python manage.py check
+    python manage.py cms check
+
+
+В urls.py добавляем:    
+    from django.conf.urls import url, include
+    from django.conf import settings
+    from django.conf.urls.static import static
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        url(r'^', include('cms.urls')),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    
+Создаем папку templates и в ней файл home.html:
+{% load cms_tags sekizai_tags %}
+<html>
+    <head>
+        <title>{% page_attribute "page_title" %}</title>
+        {% render_block "css" %}
+    </head>
+    <body>
+        {% cms_toolbar %}
+        {% placeholder "content" %}
+        {% render_block "js" %}
+    </body>
+</html>    
+
+Выполняем миграции:
+    python manage.py migrate
+
+Запускаем сервер:
+    python manage.py runserver
+
+На сайте предлагается также установить плагины для CKEditor:
+    pip install djangocms-link djangocms-file djangocms-picture djangocms-video djangocms-googlemap djangocms-snippet djangocms-style djangocms-column
+и добавить в INSTALLED_APPS:
+    'djangocms_link',
+    'djangocms_file',
+    'djangocms_picture',
+    'djangocms_video',
+    'djangocms_googlemap',
+    'djangocms_snippet',
+    'djangocms_style',
+    'djangocms_column',
+

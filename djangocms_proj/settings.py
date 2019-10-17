@@ -44,6 +44,15 @@ INSTALLED_APPS = [
     'cms',
     'menus',
     'treebeard',
+    'sekizai',
+
+    # djangocms: filer
+    'filer',
+    'easy_thumbnails',
+    'mptt',
+    
+    # djangocms: ckeditor
+    'djangocms_text_ckeditor'
     
 ]
 
@@ -55,6 +64,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # djangocms
+    'django.middleware.locale.LocaleMiddleware', 
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
+    'cms.middleware.utils.ApphookReloadMiddleware',
 ]
 
 ROOT_URLCONF = 'djangocms_proj.urls'
@@ -62,7 +79,7 @@ ROOT_URLCONF = 'djangocms_proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,6 +87,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                # djangocms
+                'cms.context_processors.cms_settings',
+                'sekizai.context_processors.sekizai',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -127,9 +149,25 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 SITE_ID = 1
 
 LANGUAGES = [
     ('ru', 'Russian'),
     ('en', 'English'),
 ]
+
+CMS_TEMPLATES = [
+    ('home.html', 'Home page template'),
+]
+
+THUMBNAIL_HIGH_RESOLUTION = True
+
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters'
+)
