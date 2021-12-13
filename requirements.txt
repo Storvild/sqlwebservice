@@ -27,7 +27,7 @@ djangocms-admin-style==1.4.0
 djangocms-text-ckeditor==3.8.0
 easy-thumbnails==2.6
 html5lib==1.0.1
-lxml==4.4.1
+lxml==4.6.5
 phonenumbers==8.10.20
 phonenumberslite==8.10.20
 Pillow==6.2.0
